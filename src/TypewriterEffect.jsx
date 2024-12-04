@@ -1,10 +1,30 @@
+import { useState } from "react";
+
 const TypewriterEffect = () => {
+  const [typedSentence, setTypedSentence] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     // TODO Display the text with typewriter effect
-    console.log(`The sentence to display is ${data.get("sentence")}`);
+    let sentence = data.get("sentence");
+    let displayedStr = "You typed: ";
+    typeSentence(displayedStr, sentence);
   };
+
+  const typeSentence = (currentSentence, remainingSentence) => {
+    setTimeout(() => {
+      let newSentence = currentSentence + remainingSentence[0];
+
+      setTypedSentence(newSentence);
+
+      if (remainingSentence.length > 1) {
+        let newRemaining = remainingSentence.slice(1);
+        typeSentence(newSentence, newRemaining);
+      }
+    }, 500);
+  }
+
   return (
     <div>
       <form
@@ -22,6 +42,7 @@ const TypewriterEffect = () => {
         />
         <button type="submit">Display with typewriter effect</button>
       </form>
+      <p>{typedSentence}</p>
     </div>
   );
 };
